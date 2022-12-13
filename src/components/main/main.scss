@@ -1,0 +1,9 @@
+.main {
+  background-color: #e5e5e5;
+  flex: 1 1 100%;
+
+  &__container {
+    max-width: 95%;
+    margin: 0 auto;
+  }
+}
