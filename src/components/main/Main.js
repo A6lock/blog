@@ -1,9 +1,11 @@
+import ArticleList from '../articleList/ArticleList';
+
 import './main.scss';
 
 function Main() {
   return (
     <div className="main">
-      <div className="main__container">Main</div>
+      <ArticleList />
     </div>
   );
 }
