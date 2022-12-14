@@ -6,6 +6,7 @@ function Header() {
     <div className="header">
       <div className="header__container">
         <div className="header__logo">
+          {/* Не рендерится только в артикл */}
           <a href="#" className="header__link">
             Realworld Blog
           </a>

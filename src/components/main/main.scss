@@ -10,4 +10,10 @@ li {
   padding-top: 26px;
   background-color: #ebeef3;
   flex: 1 1 100%;
+
+  &__pagination {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 17px;
+  }
 }

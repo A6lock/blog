@@ -1,32 +1,49 @@
-import avatar from './avatar.svg';
+import { format } from 'date-fns';
+import { v4 as uiidv4 } from 'uuid';
+
+import heart from './heart.svg';
 
 import './articleItem.scss';
 
-function ArticleItem() {
+function ArticleItem({
+  title,
+  favoritesCount,
+  description,
+  createdAt,
+  tagList,
+  author,
+}) {
   return (
     <li className="article-item">
       <article className="article-item__wrapper">
         <div className="article-item__columns">
           <div className="article-item__content">
             <header className="article-item__header">
-              <h2>Some article title ♡</h2>
+              <h2>{title}</h2>
+              <button type="button">
+                <img src={heart} alt="Like bottom" />
+              </button>
+              <span className="article-item__likes">{favoritesCount}</span>
             </header>
-            <div className="article-item__tags">Tag1</div>
-            <div className="article-item__text">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat.
-            </div>
+            <ul className="article-item__tags-list">
+              {tagList.map((tag) => (
+                <li className="article-item__tag-item" key={uiidv4()}>
+                  {tag}
+                </li>
+              ))}
+            </ul>
+            <p className="article-item__text">{description}</p>
           </div>
           <div className="article-item__info">
             <div className="article-item__tech-info">
-              <h3 className="article-item__author">John Doe</h3>
-              <span className="article-item__date">March 5, 2020</span>
+              <h3 className="article-item__author">{author.username}</h3>
+              <span className="article-item__date">
+                {format(new Date(createdAt), 'MMMM dd, yyyy')}
+              </span>
             </div>
             <img
               className="article-item__avatar"
-              src={avatar}
+              src={author.image}
               alt="Author avatar"
             />
           </div>

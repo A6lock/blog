@@ -12,7 +12,8 @@ a {
   line-height: 28px;
 
   &__container {
-    max-width: 95%;
+    width: 95%;
+    max-width: 1440px;
     height: 80px;
     margin: 0 auto;
     display: flex;
