@@ -26,11 +26,16 @@ function ArticleItem({
               <span className="article-item__likes">{favoritesCount}</span>
             </header>
             <ul className="article-item__tags-list">
-              {tagList.map((tag) => (
-                <li className="article-item__tag-item" key={uiidv4()}>
-                  {tag}
-                </li>
-              ))}
+              {tagList.map((tag) => {
+                if (tag.length) {
+                  return (
+                    <li className="article-item__tag-item" key={uiidv4()}>
+                      {tag}
+                    </li>
+                  );
+                }
+                return null;
+              })}
             </ul>
             <p className="article-item__text">{description}</p>
           </div>

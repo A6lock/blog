@@ -13,7 +13,9 @@ export default class RealWorldService {
     return await res.json();
   };
 
-  getArticles = () => {
-    return this.getResource(`${this._apiBase}articles?limit=5`);
+  getArticles = (page = 1) => {
+    return this.getResource(
+      `${this._apiBase}articles?limit=5&offset=${(page - 1) * 5}`
+    );
   };
 }
