@@ -1,14 +1,25 @@
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+
 import Header from '../header/Header';
-import Main from '../main/Main';
+import { SingleArticlePage, MainPage } from '../pages';
 
 import './app.scss';
 
 function App() {
   return (
-    <div className="wrapper">
-      <Header />
-      <Main />
-    </div>
+    <Router>
+      <div className="wrapper">
+        <Header />
+        <Switch>
+          <Route exact path="/articles/:slug">
+            <SingleArticlePage />
+          </Route>
+          <Route path={['/', '/articles']}>
+            <MainPage />
+          </Route>
+        </Switch>
+      </div>
+    </Router>
   );
 }
 

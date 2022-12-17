@@ -18,4 +18,8 @@ export default class RealWorldService {
       `${this._apiBase}articles?limit=5&offset=${(page - 1) * 5}`
     );
   };
+
+  getArticle = (slug) => {
+    return this.getResource(`${this._apiBase}articles/${slug}`);
+  };
 }

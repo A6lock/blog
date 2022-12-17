@@ -1,31 +1,27 @@
-import { Pagination } from 'antd';
-import { useEffect } from 'react';
+/* eslint-disable react/destructuring-assignment */
+import { Pagination, Spin } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
-
-// import Article from '../article/Article';
+import { useEffect } from 'react';
 
 import ArticleList from '../articleList/ArticleList';
-import RealWorldService from '../../services/RealWorldService';
 
-import { changePage, getArtList } from './mainSlice';
+import { changePage, fetchArticlesData } from './mainSlice';
 
 import './main.scss';
 
-function Main() {
-  const realWorldService = new RealWorldService();
-
-  const articlesData = useSelector((state) => state.main.articlesData);
+function Main(props) {
   const page = useSelector((state) => state.main.page);
   const articlesCount = useSelector((state) => state.main.articlesCount);
+  const loadingStatus = useSelector((state) => state.main.loadingStatus);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    realWorldService.getArticles(page).then((res) => dispatch(getArtList(res)));
+    dispatch(fetchArticlesData(page));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
 
-  const pagination = articlesData.length ? (
+  const pagination = articlesCount ? (
     <Pagination
       className="main__pagination"
       defaultCurrent={page}
@@ -34,11 +30,28 @@ function Main() {
     />
   ) : null;
 
+  const spin = <Spin size="large" style={{ marginTop: '20%' }} />;
+
+  const error = <h2>Ашибка</h2>;
+
+  const getLoadingStatus = (loadingStatus) => {
+    switch (loadingStatus) {
+      case 'loading':
+        return spin;
+      case 'error':
+        return error;
+      default:
+        return <ArticleList />;
+    }
+  };
+
+  const visibleData = getLoadingStatus(loadingStatus);
+
   return (
     <div className="main">
-      <ArticleList articlesData={articlesData} />
-      {/* <Article /> */}
+      {visibleData}
       {pagination}
+      {props.children}
     </div>
   );
 }

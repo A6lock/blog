@@ -47,6 +47,7 @@
   &__tags-list {
     display: flex;
     gap: 3px 3px;
+    flex-wrap: wrap;
     width: max-content;
     font-family: 'Inter';
     font-style: normal;
@@ -73,6 +74,11 @@
     width: 46px;
     height: 46px;
   }
+}
+
+.article-item--body {
+  height: 100%;
+  max-height: 807px;
 }
 
 button {

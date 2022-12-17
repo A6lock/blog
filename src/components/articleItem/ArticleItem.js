@@ -1,5 +1,7 @@
 import { format } from 'date-fns';
 import { v4 as uiidv4 } from 'uuid';
+import { Link } from 'react-router-dom';
+import ReactMarkdown from 'react-markdown';
 
 import heart from './heart.svg';
 
@@ -12,14 +14,22 @@ function ArticleItem({
   createdAt,
   tagList,
   author,
+  slug,
+  singleArticleBody,
 }) {
+  const body = singleArticleBody ? (
+    <ReactMarkdown>{singleArticleBody}</ReactMarkdown>
+  ) : null;
+
+  const articleItemClass = singleArticleBody ? 'article-item--body' : null;
+
   return (
-    <li className="article-item">
+    <div className={`article-item ${articleItemClass}`}>
       <article className="article-item__wrapper">
         <div className="article-item__columns">
           <div className="article-item__content">
             <header className="article-item__header">
-              <h2>{title}</h2>
+              <Link to={`/articles/${slug}`}>{title}</Link>
               <button type="button">
                 <img src={heart} alt="Like bottom" />
               </button>
@@ -27,14 +37,12 @@ function ArticleItem({
             </header>
             <ul className="article-item__tags-list">
               {tagList.map((tag) => {
-                if (tag.length) {
-                  return (
-                    <li className="article-item__tag-item" key={uiidv4()}>
-                      {tag}
-                    </li>
-                  );
-                }
-                return null;
+                // Придумать че-то когда нет тегов
+                return (
+                  <li className="article-item__tag-item" key={uiidv4()}>
+                    {tag}
+                  </li>
+                );
               })}
             </ul>
             <p className="article-item__text">{description}</p>
@@ -53,8 +61,9 @@ function ArticleItem({
             />
           </div>
         </div>
+        {body}
       </article>
-    </li>
+    </div>
   );
 }
 
