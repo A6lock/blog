@@ -1,4 +1,6 @@
 /* eslint-disable react/destructuring-assignment */
+// должен быть HOC
+
 import { Pagination, Spin } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
@@ -48,11 +50,11 @@ function Main(props) {
   const visibleData = getLoadingStatus(loadingStatus);
 
   return (
-    <div className="main">
+    <>
       {visibleData}
       {pagination}
       {props.children}
-    </div>
+    </>
   );
 }
 

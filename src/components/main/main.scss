@@ -6,15 +6,7 @@ li {
   padding: 0;
 }
 
-.main {
-  padding-top: 26px;
-  background-color: #ebeef3;
-  flex: 1 1 100%;
-  flex-direction: column;
+.main__pagination {
   display: flex;
-  align-items: center;
-  &__pagination {
-    display: flex;
-    margin-bottom: 17px;
-  }
+  margin-bottom: 17px;
 }

@@ -14,7 +14,7 @@ function Header() {
           </Link>
         </div>
         <div className="header__authorization authorization">
-          <NavLink exact to="/" className="authorization__link">
+          <NavLink exact to="/sign-in" className="authorization__link">
             Sign In
           </NavLink>
           <NavLink

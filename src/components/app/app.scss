@@ -3,3 +3,12 @@
   display: flex;
   flex-direction: column;
 }
+
+.main {
+  padding-top: 26px;
+  background-color: #ebeef3;
+  flex: 1 1 100%;
+  flex-direction: column;
+  display: flex;
+  align-items: center;
+}
