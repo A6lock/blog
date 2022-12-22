@@ -1,6 +1,6 @@
-import Main from '../main/Main';
+import ArticleList from '../articleList/ArticleList';
 
 function MainPage() {
-  return <Main />;
+  return <ArticleList />;
 }
 export default MainPage;

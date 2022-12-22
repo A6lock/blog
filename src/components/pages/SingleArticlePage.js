@@ -1,5 +1,3 @@
-/*eslint-disable */
-
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { Spin } from 'antd';
@@ -34,8 +32,6 @@ function SingleArticlePage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  console.log(articleLoading);
-
   const error = articleError ? <span>Error</span> : null;
   const spin = articleLoading ? <Spin size="large" /> : null;
   const content = !(articleError || articleLoading || !articleData) ? (
@@ -51,9 +47,8 @@ function SingleArticlePage() {
   );
 }
 
-const View = ({ article }) => {
-  console.log(article);
+function View({ article }) {
   return <Article articleData={article} />;
-};
+}
 
 export default SingleArticlePage;

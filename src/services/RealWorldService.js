@@ -1,7 +1,7 @@
+/* eslint-disable class-methods-use-this */
 export default class RealWorldService {
   _apiBase = 'https://blog.kata.academy/api/';
 
-  // eslint-disable-next-line class-methods-use-this
   getResource = async (url) => {
     const res = await fetch(url);
 
@@ -10,7 +10,22 @@ export default class RealWorldService {
     }
 
     // eslint-disable-next-line no-return-await
-    return await res.json();
+    return res.json();
+  };
+
+  postResource = async (url, body) => {
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8',
+      },
+      body: JSON.stringify(body),
+    });
+
+    if (!res.ok) {
+      throw new Error(`Запрос ${url} не узался. Код ошибки ${res.status}`);
+    }
+    return res.json();
   };
 
   getArticles = (page = 1) => {

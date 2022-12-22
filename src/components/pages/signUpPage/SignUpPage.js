@@ -1,7 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { Link } from 'react-router-dom';
 import { useForm, Controller } from 'react-hook-form';
-import './SignInPage.scss';
 import { Input, Checkbox, Divider, Button } from 'antd';
 
 function SignUpPage() {
@@ -166,8 +165,6 @@ function SignUpPage() {
               name="Approval"
               defaultValue
             />
-            {/* <input type="checkbox" />
-            <span>I agree to the processing of my personal information</span> */}
           </label>
         </label>
         <Button
@@ -178,7 +175,6 @@ function SignUpPage() {
         >
           Create
         </Button>
-        {/* <button className='form__button' type="submit" disabled={!isValid}>Create</button> */}
       </form>
       <span className="under-button-text">
         Already have an account?{' '}

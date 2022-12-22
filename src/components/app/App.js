@@ -1,13 +1,7 @@
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 import Header from '../header/Header';
-import {
-  SingleArticlePage,
-  MainPage,
-  SignInPage,
-  SignUpPage,
-  EditProfilePage,
-} from '../pages';
+import { SingleArticlePage, MainPage, FormPage } from '../pages';
 
 import './app.scss';
 
@@ -22,13 +16,13 @@ function App() {
               <SingleArticlePage />
             </Route>
             <Route exact path="/sign-in">
-              <SignInPage />
+              <FormPage signIn />
             </Route>
             <Route exact path="/sign-up">
-              <SignUpPage />
+              <FormPage signUp />
             </Route>
-            <Route>
-              <EditProfilePage exact path="/profile" />
+            <Route exact path="/profile">
+              <FormPage edit />
             </Route>
             <Route path={['/', '/articles']}>
               <MainPage />
