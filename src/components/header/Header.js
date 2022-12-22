@@ -19,7 +19,7 @@ function Header() {
           </NavLink>
           <NavLink
             exact
-            to="/"
+            to="/sign-up"
             className="authorization__link authorization__link--active"
           >
             Sign Up
