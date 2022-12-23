@@ -12,9 +12,9 @@ import './articleList.scss';
 
 function ArticleList() {
   const articlesData = useSelector((state) => state.articleList.articlesData);
-  const page = useSelector((state) => state.page);
-  const articlesCount = useSelector((state) => state.articlesCount);
-  const loadingStatus = useSelector((state) => state.loadingStatus);
+  const page = useSelector((state) => state.articleList.page);
+  const articlesCount = useSelector((state) => state.articleList.articlesCount);
+  const loadingStatus = useSelector((state) => state.articleList.loadingStatus);
 
   const dispatch = useDispatch();
 

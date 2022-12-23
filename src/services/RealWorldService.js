@@ -6,7 +6,7 @@ export default class RealWorldService {
     const res = await fetch(url);
 
     if (!res.ok) {
-      throw new Error(`Запрос ${url} не узался. Код ошибки ${res.status}`);
+      throw new Error(`Запрос ${url} не удался. Код ошибки ${res.status}`);
     }
 
     // eslint-disable-next-line no-return-await
@@ -23,7 +23,9 @@ export default class RealWorldService {
     });
 
     if (!res.ok) {
-      throw new Error(`Запрос ${url} не узался. Код ошибки ${res.status}`);
+      return res.json().then((text) => {
+        throw text;
+      });
     }
     return res.json();
   };
@@ -38,7 +40,7 @@ export default class RealWorldService {
     });
 
     if (!res.ok) {
-      throw new Error(`Запрос ${url} не узался. Код ошибки ${res.status}`);
+      throw new Error(`Запрос ${url} не уlался. Код ошибки ${res.status}`);
     }
     return res.json();
   };
@@ -47,13 +49,13 @@ export default class RealWorldService {
     const res = await fetch(url, {
       method: 'DELETE',
       headers: {
-        'Content-Type': 'application/json;charset=utf-8',
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(body),
     });
 
     if (!res.ok) {
-      throw new Error(`Запрос ${url} не узался. Код ошибки ${res.status}`);
+      throw new Error(`Запрос ${url} не уlался. Код ошибки ${res.status}`);
     }
     return res.json();
   };

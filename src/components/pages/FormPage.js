@@ -1,40 +1,82 @@
+/*eslint-disable */
 /* eslint-disable no-alert */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import { Link } from 'react-router-dom';
+import { Link, useRouteMatch } from 'react-router-dom';
 import { useForm, Controller } from 'react-hook-form';
-import { Input, Checkbox, Divider, Button, Form } from 'antd';
+import { Input, Checkbox, Divider, Button } from 'antd';
+import { useDispatch, useSelector } from 'react-redux';
+
+import RealWorldService from '../../services/RealWorldService';
+import {
+  changeToken,
+  changeEmail,
+  changeUsername,
+  isError,
+  noError,
+  upLoaded,
+  loading,
+} from '../app/appSlice';
 
 // Этот компонент в зависимости от пропсов возвращает немного разные страницы.
 function FormPage({ edit, signIn, signUp }) {
+  const loading = useSelector((state) => state.appSlice.loading);
+  const error = useSelector((state) => state.appSlice.error);
+
+  const dispattch = useDispatch();
+
   const {
-    formState: { isValid },
+    formState: { isValid, errors },
     handleSubmit,
-    reset,
     control,
     watch,
+    setError,
   } = useForm({
     mode: 'onBlur',
   });
 
-  const onSubmit = () => {
+  const realWorldService = new RealWorldService();
+
+  const { path } = useRouteMatch();
+
+  const onSubmit = (data) => {
+    const user = {
+      user: {
+        username: data.username,
+        email: data.email.toLowerCase(),
+        password: data.password,
+      },
+    };
+
     // eslint-disable-next-line default-case
-    switch ((edit, signIn, signUp)) {
-      case edit:
+    switch (path.slice(1)) {
+      case 'profile':
         alert('edit');
         break;
-      case signIn:
+      case 'sign-in':
         alert('signIn');
         break;
-      case signUp:
-        alert('signUp');
+      case 'sign-up':
+        // Регистрация
+        realWorldService
+          .registrationAccout(user)
+          .then(({ user }) => {
+            dispattch(changeToken(user.token));
+            dispattch(changeEmail(user.email));
+            dispattch(changeUsername(user.username));
+            localStorage.setItem('user', JSON.stringify(user));
+          })
+          .catch(({ errors }) => {
+            for (let error in errors) {
+              setError(error, { type: 'custom', message: errors[error] });
+            }
+          });
         break;
     }
-    reset();
   };
 
   // Отслеживаю пароль, если у меня регистрация или изменение
-  const watchPassword = edit || signUp ? watch('Password') : null;
+  const watchPassword = edit || signUp ? watch('password') : null;
 
   // Отслеживаю чекбокс, если у меня регистрация
   const watchCheckbox = signUp ? watch('Approval') : null;
@@ -48,7 +90,7 @@ function FormPage({ edit, signIn, signUp }) {
       <h1 className="form__tittle">
         {signUp ? 'Create new account' : signIn ? 'Sign in' : 'Edit Profile'}
       </h1>
-      <Form className="form__container" onFinish={handleSubmit(onSubmit)}>
+      <form className="form__container" onSubmit={handleSubmit(onSubmit)}>
         {/* Если регистрация или изменение - вывожу инпут Username */}
         {signUp || edit ? (
           <label className="form__element">
@@ -70,7 +112,7 @@ function FormPage({ edit, signIn, signUp }) {
                   </>
                 );
               }}
-              name="Username"
+              name="username"
               control={control}
               defaultValue=""
               rules={{
@@ -104,7 +146,7 @@ function FormPage({ edit, signIn, signUp }) {
                 </>
               );
             }}
-            name="Email"
+            name="email"
             control={control}
             defaultValue=""
             rules={{
@@ -136,7 +178,7 @@ function FormPage({ edit, signIn, signUp }) {
                 </>
               );
             }}
-            name="Password"
+            name="password"
             control={control}
             defaultValue=""
             rules={{
@@ -173,7 +215,7 @@ function FormPage({ edit, signIn, signUp }) {
                   </>
                 );
               }}
-              name="RepeatPassword"
+              name="repeatPassword"
               control={control}
               defaultValue=""
               rules={{
@@ -255,7 +297,7 @@ function FormPage({ edit, signIn, signUp }) {
           {signUp ? 'Create' : signIn ? 'Login' : 'Save'}
         </Button>
         {/* Ссылка под кнопкой меняется в зависимости от вида формы */}
-      </Form>
+      </form>
       {signUp ? (
         <span className="under-button-text">
           Already have an account?{' '}
