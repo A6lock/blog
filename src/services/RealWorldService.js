@@ -28,6 +28,36 @@ export default class RealWorldService {
     return res.json();
   };
 
+  putResource = async (url, body) => {
+    const res = await fetch(url, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8',
+      },
+      body: JSON.stringify(body),
+    });
+
+    if (!res.ok) {
+      throw new Error(`Запрос ${url} не узался. Код ошибки ${res.status}`);
+    }
+    return res.json();
+  };
+
+  deleteResource = async (url, body) => {
+    const res = await fetch(url, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8',
+      },
+      body: JSON.stringify(body),
+    });
+
+    if (!res.ok) {
+      throw new Error(`Запрос ${url} не узался. Код ошибки ${res.status}`);
+    }
+    return res.json();
+  };
+
   getArticles = (page = 1) => {
     return this.getResource(
       `${this._apiBase}articles?limit=5&offset=${(page - 1) * 5}`
@@ -36,5 +66,9 @@ export default class RealWorldService {
 
   getArticle = (slug) => {
     return this.getResource(`${this._apiBase}articles/${slug}`);
+  };
+
+  registrationAccout = (body) => {
+    return this.postResource(`${this._apiBase}users/`, body);
   };
 }

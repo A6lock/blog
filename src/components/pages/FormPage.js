@@ -1,8 +1,9 @@
+/* eslint-disable no-alert */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { Link } from 'react-router-dom';
 import { useForm, Controller } from 'react-hook-form';
-import { Input, Checkbox, Divider, Button } from 'antd';
+import { Input, Checkbox, Divider, Button, Form } from 'antd';
 
 // Этот компонент в зависимости от пропсов возвращает немного разные страницы.
 function FormPage({ edit, signIn, signUp }) {
@@ -17,6 +18,18 @@ function FormPage({ edit, signIn, signUp }) {
   });
 
   const onSubmit = () => {
+    // eslint-disable-next-line default-case
+    switch ((edit, signIn, signUp)) {
+      case edit:
+        alert('edit');
+        break;
+      case signIn:
+        alert('signIn');
+        break;
+      case signUp:
+        alert('signUp');
+        break;
+    }
     reset();
   };
 
@@ -35,7 +48,7 @@ function FormPage({ edit, signIn, signUp }) {
       <h1 className="form__tittle">
         {signUp ? 'Create new account' : signIn ? 'Sign in' : 'Edit Profile'}
       </h1>
-      <form className="form__container" onSubmit={handleSubmit(onSubmit)}>
+      <Form className="form__container" onFinish={handleSubmit(onSubmit)}>
         {/* Если регистрация или изменение - вывожу инпут Username */}
         {signUp || edit ? (
           <label className="form__element">
@@ -49,6 +62,7 @@ function FormPage({ edit, signIn, signUp }) {
                       {...field}
                       placeholder={field.name}
                       style={inputStyle}
+                      autoComplete="on"
                     />
                     {error && (
                       <div style={{ color: 'red' }}>{error.message}</div>
@@ -116,6 +130,7 @@ function FormPage({ edit, signIn, signUp }) {
                     {...field}
                     placeholder={field.name}
                     style={inputStyle}
+                    autoComplete="on"
                   />
                   {error && <div style={{ color: 'red' }}>{error.message}</div>}
                 </>
@@ -150,6 +165,7 @@ function FormPage({ edit, signIn, signUp }) {
                       {...field}
                       placeholder={field.name}
                       style={inputStyle}
+                      autoComplete="on"
                     />
                     {error && (
                       <div style={{ color: 'red' }}>{error.message}</div>
@@ -233,13 +249,13 @@ function FormPage({ edit, signIn, signUp }) {
           type="primary"
           htmlType="submit"
           style={{ width: '100%', marginBottom: '7px' }}
-          disabled={!isValid || !watchCheckbox}
+          disabled={!isValid && !watchCheckbox}
         >
           {/* Надпись кнопки меняется в зависимости от вида формы */}
           {signUp ? 'Create' : signIn ? 'Login' : 'Save'}
         </Button>
         {/* Ссылка под кнопкой меняется в зависимости от вида формы */}
-      </form>
+      </Form>
       {signUp ? (
         <span className="under-button-text">
           Already have an account?{' '}
