@@ -4,16 +4,17 @@ import { v4 as uiidv4 } from 'uuid';
 import { useSelector, useDispatch } from 'react-redux/es/exports';
 import { useEffect } from 'react';
 
-import { changePage, fetchArticlesData } from '../main/mainSlice';
 import ArticleItem from '../articleItem/ArticleItem';
+
+import { changePage, fetchArticlesData } from './articleListSlice';
 
 import './articleList.scss';
 
 function ArticleList() {
   const articlesData = useSelector((state) => state.articleList.articlesData);
-  const page = useSelector((state) => state.main.page);
-  const articlesCount = useSelector((state) => state.main.articlesCount);
-  const loadingStatus = useSelector((state) => state.main.loadingStatus);
+  const page = useSelector((state) => state.page);
+  const articlesCount = useSelector((state) => state.articlesCount);
+  const loadingStatus = useSelector((state) => state.loadingStatus);
 
   const dispatch = useDispatch();
 
@@ -37,8 +38,8 @@ function ArticleList() {
 
   const articleList = articlesData.map((article) => {
     return (
-      <li>
-        <ArticleItem key={uiidv4()} {...article} />
+      <li key={uiidv4()}>
+        <ArticleItem {...article} />
       </li>
     );
   });
