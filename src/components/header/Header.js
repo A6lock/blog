@@ -1,53 +1,86 @@
+/* eslint-disable */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { Link, NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux/es/exports';
+
+import { clearData } from '../app/appSlice';
 
 import './header.scss';
 
 import avatar from '../../assets/images/defaultAvatar.svg';
 
-const signIn = (
-  <NavLink exact to="/sign-in" className="authorization__link">
-    Sign In
-  </NavLink>
-);
-
-const user = <User data="John Doe" img={avatar} />;
-
-const signUp = (
-  <NavLink
-    exact
-    to="/sign-up"
-    className="authorization__link authorization__link--active"
-  >
-    Sign Up
-  </NavLink>
-);
-
 function Header() {
+  const username = useSelector((state) => state.appSlice.username);
+
+  const dispatch = useDispatch();
+
+  console.log(clearData);
+
+  const clearUserData = () => {
+    localStorage.clear() && dispatch(clearData());
+  };
+
+  const signIn = (
+    <Link to="/sign-in" className="authorization__link">
+      Sign In
+    </Link>
+  );
+
+  const user = <User name={username} img={avatar} />;
+
+  const signUp = (
+    <Link
+      to="/sign-up"
+      className="authorization__link authorization__link--active"
+    >
+      Sign Up
+    </Link>
+  );
+
+  const createArticle = (
+    <Link
+      to="/"
+      className="authorization__link authorization__link--active"
+      style={{ height: '31px', display: 'flex', alignItems: 'center' }}
+    >
+      Create article
+    </Link>
+  );
+
+  const logOut = (
+    <Link
+      to="/"
+      className="authorization__link authorization__link--active"
+      onClick={() => clearUserData()}
+      style={{ color: 'black', border: '1px solid black' }}
+    >
+      Log out
+    </Link>
+  );
+
   return (
     <header className="header">
       <div className="header__container">
         <div className="header__logo">
-          {/* Не рендерится только в артикл */}
           <Link to="/articles" className="header__link">
             Realworld Blog
           </Link>
         </div>
         <div className="header__authorization authorization">
-          {signIn}
-          {user}
-          {signUp}
+          {username ? createArticle : signIn}
+          {username && user}
+          {username ? logOut : signUp}
         </div>
       </div>
     </header>
   );
 }
 
-function User({ data, img }) {
+function User({ name, img }) {
   return (
     <Link className="user" to="/profile">
-      <p className="user__name">{data}</p>
-      <img className="user__avatr" src={img} alt="" />
+      <p className="user__name">{name}</p>
+      <img className="user__avatr" src={img} alt="avatar" />
     </Link>
   );
 }

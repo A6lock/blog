@@ -2,28 +2,27 @@
 /* eslint-disable no-alert */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import { Link, useRouteMatch } from 'react-router-dom';
+import { Link, useRouteMatch, Redirect } from 'react-router-dom';
 import { useForm, Controller } from 'react-hook-form';
 import { Input, Checkbox, Divider, Button } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
 
 import RealWorldService from '../../services/RealWorldService';
 import {
   changeToken,
   changeEmail,
   changeUsername,
-  isError,
-  noError,
-  upLoaded,
-  loading,
+  userDataFilling,
 } from '../app/appSlice';
 
 // Этот компонент в зависимости от пропсов возвращает немного разные страницы.
 function FormPage({ edit, signIn, signUp }) {
-  const loading = useSelector((state) => state.appSlice.loading);
-  const error = useSelector((state) => state.appSlice.error);
+  const token = useSelector((state) => state.appSlice.token);
 
-  const dispattch = useDispatch();
+  const dispatch = useDispatch();
+
+  const { path } = useRouteMatch();
 
   const {
     formState: { isValid, errors },
@@ -35,36 +34,49 @@ function FormPage({ edit, signIn, signUp }) {
     mode: 'onBlur',
   });
 
+  useEffect(() => {}, [token]);
+
   const realWorldService = new RealWorldService();
 
-  const { path } = useRouteMatch();
+  // Редирект на главную после того, как обновим токен
+  if (token) {
+    return <Redirect to="/articles" />;
+  }
 
   const onSubmit = (data) => {
-    const user = {
-      user: {
-        username: data.username,
-        email: data.email.toLowerCase(),
-        password: data.password,
-      },
-    };
-
     // eslint-disable-next-line default-case
     switch (path.slice(1)) {
       case 'profile':
         alert('edit');
         break;
       case 'sign-in':
-        alert('signIn');
+        const loginUser = {
+          user: {
+            email: data.email.toLowerCase(),
+            password: data.password,
+          },
+        };
+
+        realWorldService.login(loginUser).then((response) => {});
         break;
       case 'sign-up':
         // Регистрация
+        const registrationUser = {
+          user: {
+            username: data.username,
+            email: data.email.toLowerCase(),
+            password: data.password,
+          },
+        };
+
         realWorldService
-          .registrationAccout(user)
+          .registrationAccout(registrationUser)
           .then(({ user }) => {
-            dispattch(changeToken(user.token));
-            dispattch(changeEmail(user.email));
-            dispattch(changeUsername(user.username));
-            localStorage.setItem('user', JSON.stringify(user));
+            dispatch(userDataFilling(user));
+
+            for (let key in user) {
+              localStorage.setItem(`${key}`, user[key]);
+            }
           })
           .catch(({ errors }) => {
             for (let error in errors) {
@@ -114,7 +126,7 @@ function FormPage({ edit, signIn, signUp }) {
               }}
               name="username"
               control={control}
-              defaultValue=""
+              defaultValue={localStorage.getItem('username')}
               rules={{
                 required: 'Username is required!',
                 minLength: {
@@ -148,7 +160,7 @@ function FormPage({ edit, signIn, signUp }) {
             }}
             name="email"
             control={control}
-            defaultValue=""
+            defaultValue={localStorage.getItem('email')}
             rules={{
               required: 'Email is required!',
               pattern: {

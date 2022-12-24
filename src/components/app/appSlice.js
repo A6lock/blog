@@ -4,15 +4,27 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
   loading: false,
   error: false,
-  token: null,
-  email: null,
-  username: null,
+  token: localStorage.getItem('token') || null,
+  email: localStorage.getItem('email') || null,
+  username: localStorage.getItem('username') || null,
 };
 
 const appSlice = createSlice({
   name: 'app',
   initialState,
   reducers: {
+    clearData: (state) => {
+      // Почему не работает диспатч?
+      console.log('dispatch');
+      state.token = null;
+      state.email = null;
+      state.username = null;
+    },
+    userDataFilling: (state, action) => {
+      state.token = action.payload.token;
+      state.email = action.payload.email;
+      state.username = action.payload.username;
+    },
     changeToken: (state, action) => {
       state.token = action.payload;
     },
@@ -47,6 +59,8 @@ export const {
   noError,
   changeEmail,
   changeUsername,
+  clearData,
+  userDataFilling,
 } = actions;
 
 export default reducer;

@@ -11,6 +11,7 @@ import { changePage, fetchArticlesData } from './articleListSlice';
 import './articleList.scss';
 
 function ArticleList() {
+  const token = useSelector((state) => state.appSlice.token);
   const articlesData = useSelector((state) => state.articleList.articlesData);
   const page = useSelector((state) => state.articleList.page);
   const articlesCount = useSelector((state) => state.articleList.articlesCount);
@@ -21,7 +22,7 @@ function ArticleList() {
   useEffect(() => {
     dispatch(fetchArticlesData(page));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page]);
+  }, [page, token]);
 
   const pagination = articlesCount ? (
     <Pagination

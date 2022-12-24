@@ -73,4 +73,8 @@ export default class RealWorldService {
   registrationAccout = (body) => {
     return this.postResource(`${this._apiBase}users/`, body);
   };
+
+  login = (body) => {
+    return this.postResource(`${this._apiBase}users/login`, body);
+  };
 }
