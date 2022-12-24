@@ -2,11 +2,11 @@
 /* eslint-disable no-alert */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import { Link, useRouteMatch, useHistory } from 'react-router-dom';
+import { Link, useRouteMatch, useHistory, Redirect } from 'react-router-dom';
 import { useForm, Controller } from 'react-hook-form';
 import { Input, Checkbox, Divider, Button } from 'antd';
-import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import RealWorldService from '../../services/RealWorldService';
 import {
@@ -18,9 +18,9 @@ import {
 
 // Этот компонент в зависимости от пропсов возвращает немного разные страницы.
 function FormPage({ edit, signIn, signUp }) {
-  const history = useHistory();
-
   const token = useSelector((state) => state.appSlice.token);
+
+  const history = useHistory();
 
   const dispatch = useDispatch();
 
@@ -32,9 +32,31 @@ function FormPage({ edit, signIn, signUp }) {
     control,
     watch,
     setError,
+    setValue,
   } = useForm({
     mode: 'onBlur',
   });
+
+  // Функция серверной валидации логина
+  const serverLoginValidation = (...keys) => {
+    [...keys].forEach((key) => {
+      setError(key, {
+        type: 'custom',
+        message: 'Email or password is invalid',
+      });
+      setValue(key, null);
+    });
+  };
+
+  //Реселект на главную, если на страницу редактирования профиля зашли без токена
+  if (!token && edit) {
+    return <Redirect to="/articles" />;
+  }
+
+  //Реселект на главную, залогиненный пользователь хочет зайти на signIn or signUp
+  if (token && (signIn || signUp)) {
+    return <Redirect to="/articles" />;
+  }
 
   const realWorldService = new RealWorldService();
 
@@ -43,8 +65,16 @@ function FormPage({ edit, signIn, signUp }) {
     switch (path.slice(1)) {
       case 'profile':
         const changeableData = {
-          user: Object.assign({}, data),
+          user: {
+            username: data.username,
+            email: data.email.toLowerCase(),
+            password: data.password,
+            image: data.image,
+          },
         };
+        console.log('data', data);
+        console.log('dataImage', data.image);
+        localStorage.setItem('image', data.image);
 
         realWorldService
           .registrationAccout(changeableData)
@@ -54,16 +84,15 @@ function FormPage({ edit, signIn, signUp }) {
             for (let key in user) {
               localStorage.setItem(`${key}`, user[key]);
             }
+
+            //Переход на главную после изменений
+            history.push('/articles');
           })
           .catch(({ errors }) => {
             for (let error in errors) {
               setError(error, { type: 'custom', message: errors[error] });
             }
           });
-
-        //Переход на главную после изменений
-        history.push('/articles');
-
         break;
       case 'sign-in':
         const loginUser = {
@@ -73,11 +102,21 @@ function FormPage({ edit, signIn, signUp }) {
           },
         };
 
-        realWorldService.login(loginUser).then((response) => {});
+        realWorldService
+          .login(loginUser)
+          .then(({ user }) => {
+            dispatch(userDataFilling(user));
 
-        //Переход на главную после логина
-        history.push('/articles');
+            for (let key in user) {
+              localStorage.setItem(`${key}`, user[key]);
+            }
 
+            //Переход на главную после того, как зарегистируемся
+            history.push('/articles');
+          })
+          .catch(({ errors }) => {
+            serverLoginValidation('password', 'email');
+          });
         break;
       case 'sign-up':
         // Регистрация
@@ -114,7 +153,7 @@ function FormPage({ edit, signIn, signUp }) {
   const watchPassword = edit || signUp ? watch('password') : null;
 
   // Отслеживаю чекбокс, если у меня регистрация
-  const watchCheckbox = signUp ? watch('Approval') : null;
+  const watchCheckbox = signUp ? watch('approval') : null;
 
   // Валидация мейла
   const mailValidate =
@@ -315,8 +354,8 @@ function FormPage({ edit, signIn, signUp }) {
                   );
                 }}
                 control={control}
-                name="Approval"
-                defaultValue
+                name="approval"
+                defaultValue="true"
               />
             </label>
           </>

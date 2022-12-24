@@ -7,7 +7,6 @@ const initialState = {
   token: localStorage.getItem('token') || null,
   email: localStorage.getItem('email') || null,
   username: localStorage.getItem('username') || null,
-  bio: localStorage.getItem('bio') || null,
   image: localStorage.getItem('image') || null,
 };
 
@@ -16,8 +15,6 @@ const appSlice = createSlice({
   initialState,
   reducers: {
     clearData: (state) => {
-      // Почему не работает диспатч?
-      console.log('dispatch');
       state.token = null;
       state.email = null;
       state.username = null;

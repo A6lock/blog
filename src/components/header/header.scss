@@ -38,7 +38,14 @@ a {
 
 .user {
   display: flex;
+  align-items: center;
   column-gap: 10px;
+
+  &__avatar {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+  }
 }
 
 button {

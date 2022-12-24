@@ -1,7 +1,8 @@
 /* eslint-disable */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux/es/exports';
+import { useEffect } from 'react';
 
 import { clearData } from '../app/appSlice';
 
@@ -12,11 +13,15 @@ import avatar from '../../assets/images/defaultAvatar.svg';
 function Header() {
   const username = useSelector((state) => state.appSlice.username);
   const image = useSelector((state) => state.appSlice.image);
+  const history = useHistory();
 
   const dispatch = useDispatch();
 
+  useEffect(() => {}, [image]);
+
   const clearUserData = () => {
     dispatch(clearData()) && localStorage.clear();
+    history.push('/articles');
   };
 
   const signIn = (
@@ -83,7 +88,7 @@ function User({ name, image }) {
   return (
     <Link className="user" to="/profile">
       <p className="user__name">{name}</p>
-      <img className="user__avatr" src={image} alt="avatar" />
+      <img className="user__avatar" src={image} alt="avatar" />
     </Link>
   );
 }
