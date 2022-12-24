@@ -30,7 +30,7 @@ function ArticleItem({
           <div className="article-item__content">
             <header className="article-item__header">
               <Link to={`/articles/${slug}`}>{title}</Link>
-              <button type="button">
+              <button className="article-item__button" type="button">
                 <img src={heart} alt="Like bottom" />
               </button>
               <span className="article-item__likes">{favoritesCount}</span>

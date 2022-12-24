@@ -7,6 +7,8 @@ const initialState = {
   token: localStorage.getItem('token') || null,
   email: localStorage.getItem('email') || null,
   username: localStorage.getItem('username') || null,
+  bio: localStorage.getItem('bio') || null,
+  image: localStorage.getItem('image') || null,
 };
 
 const appSlice = createSlice({
@@ -24,6 +26,8 @@ const appSlice = createSlice({
       state.token = action.payload.token;
       state.email = action.payload.email;
       state.username = action.payload.username;
+      state.bio = action.payload.bio;
+      state.image = action.payload.image;
     },
     changeToken: (state, action) => {
       state.token = action.payload;

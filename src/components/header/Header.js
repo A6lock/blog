@@ -11,13 +11,12 @@ import avatar from '../../assets/images/defaultAvatar.svg';
 
 function Header() {
   const username = useSelector((state) => state.appSlice.username);
+  const image = useSelector((state) => state.appSlice.image);
 
   const dispatch = useDispatch();
 
-  console.log(clearData);
-
   const clearUserData = () => {
-    localStorage.clear() && dispatch(clearData());
+    dispatch(clearData()) && localStorage.clear();
   };
 
   const signIn = (
@@ -26,7 +25,7 @@ function Header() {
     </Link>
   );
 
-  const user = <User name={username} img={avatar} />;
+  const user = <User name={username} image={image || avatar} />;
 
   const signUp = (
     <Link
@@ -48,14 +47,18 @@ function Header() {
   );
 
   const logOut = (
-    <Link
-      to="/"
+    <button
       className="authorization__link authorization__link--active"
       onClick={() => clearUserData()}
-      style={{ color: 'black', border: '1px solid black' }}
+      style={{
+        color: 'black',
+        border: '1px solid black',
+        background: 'inherit',
+        cursor: 'pointer',
+      }}
     >
       Log out
-    </Link>
+    </button>
   );
 
   return (
@@ -76,11 +79,11 @@ function Header() {
   );
 }
 
-function User({ name, img }) {
+function User({ name, image }) {
   return (
     <Link className="user" to="/profile">
       <p className="user__name">{name}</p>
-      <img className="user__avatr" src={img} alt="avatar" />
+      <img className="user__avatr" src={image} alt="avatar" />
     </Link>
   );
 }

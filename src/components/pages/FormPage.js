@@ -2,7 +2,7 @@
 /* eslint-disable no-alert */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import { Link, useRouteMatch, Redirect } from 'react-router-dom';
+import { Link, useRouteMatch, useHistory } from 'react-router-dom';
 import { useForm, Controller } from 'react-hook-form';
 import { Input, Checkbox, Divider, Button } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
@@ -18,6 +18,8 @@ import {
 
 // Этот компонент в зависимости от пропсов возвращает немного разные страницы.
 function FormPage({ edit, signIn, signUp }) {
+  const history = useHistory();
+
   const token = useSelector((state) => state.appSlice.token);
 
   const dispatch = useDispatch();
@@ -34,20 +36,34 @@ function FormPage({ edit, signIn, signUp }) {
     mode: 'onBlur',
   });
 
-  useEffect(() => {}, [token]);
-
   const realWorldService = new RealWorldService();
-
-  // Редирект на главную после того, как обновим токен
-  if (token) {
-    return <Redirect to="/articles" />;
-  }
 
   const onSubmit = (data) => {
     // eslint-disable-next-line default-case
     switch (path.slice(1)) {
       case 'profile':
-        alert('edit');
+        const changeableData = {
+          user: Object.assign({}, data),
+        };
+
+        realWorldService
+          .registrationAccout(changeableData)
+          .then(({ user }) => {
+            dispatch(userDataFilling(user));
+
+            for (let key in user) {
+              localStorage.setItem(`${key}`, user[key]);
+            }
+          })
+          .catch(({ errors }) => {
+            for (let error in errors) {
+              setError(error, { type: 'custom', message: errors[error] });
+            }
+          });
+
+        //Переход на главную после изменений
+        history.push('/articles');
+
         break;
       case 'sign-in':
         const loginUser = {
@@ -58,6 +74,10 @@ function FormPage({ edit, signIn, signUp }) {
         };
 
         realWorldService.login(loginUser).then((response) => {});
+
+        //Переход на главную после логина
+        history.push('/articles');
+
         break;
       case 'sign-up':
         // Регистрация
@@ -77,6 +97,9 @@ function FormPage({ edit, signIn, signUp }) {
             for (let key in user) {
               localStorage.setItem(`${key}`, user[key]);
             }
+
+            //Переход на главную после того, как зарегистируемся
+            history.push('/articles');
           })
           .catch(({ errors }) => {
             for (let error in errors) {
@@ -261,9 +284,8 @@ function FormPage({ edit, signIn, signUp }) {
               }}
               name="image"
               control={control}
-              defaultValue=""
+              defaultValue={localStorage.getItem('image') || null}
               rules={{
-                required: 'URL must match',
                 pattern: {
                   value:
                     /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/,
