@@ -43,7 +43,7 @@ function Header() {
 
   const createArticle = (
     <Link
-      to="/"
+      to="/new-article"
       className="authorization__link authorization__link--active"
       style={{ height: '31px', display: 'flex', alignItems: 'center' }}
     >

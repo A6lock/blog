@@ -2,24 +2,19 @@
 /* eslint-disable no-alert */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import { Link, useRouteMatch, useHistory, Redirect } from 'react-router-dom';
+import { Link, useRouteMatch, useHistory } from 'react-router-dom';
 import { useForm, Controller } from 'react-hook-form';
 import { Input, Checkbox, Divider, Button } from 'antd';
 import { useDispatch } from 'react-redux';
-import { useSelector } from 'react-redux';
+import { useEffect, useCallback } from 'react';
 
-import RealWorldService from '../../services/RealWorldService';
-import {
-  changeToken,
-  changeEmail,
-  changeUsername,
-  userDataFilling,
-} from '../app/appSlice';
+import RealWorldService from '../../../services/RealWorldService';
+import { userDataFilling } from '../../app/appSlice';
+
+import './formPage.scss';
 
 // Этот компонент в зависимости от пропсов возвращает немного разные страницы.
 function FormPage({ edit, signIn, signUp }) {
-  const token = useSelector((state) => state.appSlice.token);
-
   const history = useHistory();
 
   const dispatch = useDispatch();
@@ -32,13 +27,23 @@ function FormPage({ edit, signIn, signUp }) {
     control,
     watch,
     setError,
+    clearErrors,
     setValue,
   } = useForm({
     mode: 'onBlur',
   });
 
-  // Функция серверной валидации логина
-  const serverLoginValidation = (...keys) => {
+  console.log(path);
+  console.log(errors);
+
+  // Очистка ошибок при переходе на другую страницу
+  useEffect(() => {
+    clearErrors();
+  }, [path]);
+
+  // Функция серверной валидации логина для react hook form
+  const serverLoginValidation = useCallback((...keys) => {
+    console.log('callback');
     [...keys].forEach((key) => {
       setError(key, {
         type: 'custom',
@@ -46,17 +51,7 @@ function FormPage({ edit, signIn, signUp }) {
       });
       setValue(key, null);
     });
-  };
-
-  //Реселект на главную, если на страницу редактирования профиля зашли без токена
-  if (!token && edit) {
-    return <Redirect to="/articles" />;
-  }
-
-  //Реселект на главную, залогиненный пользователь хочет зайти на signIn or signUp
-  if (token && (signIn || signUp)) {
-    return <Redirect to="/articles" />;
-  }
+  });
 
   const realWorldService = new RealWorldService();
 

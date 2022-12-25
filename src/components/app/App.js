@@ -1,28 +1,44 @@
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  Redirect,
+} from 'react-router-dom';
+import { useSelector } from 'react-redux/es/hooks/useSelector';
 
 import Header from '../header/Header';
-import { SingleArticlePage, MainPage, FormPage } from '../pages';
+import {
+  SingleArticlePage,
+  MainPage,
+  FormPage,
+  CreateArticlePage,
+} from '../pages';
 
 import './app.scss';
 
 function App() {
+  const token = useSelector((state) => state.appSlice.token);
+
   return (
     <Router>
       <div className="wrapper">
         <Header />
         <main className="main">
           <Switch>
-            <Route exact path="/articles/:slug">
+            <Route path="/articles/:slug">
               <SingleArticlePage />
             </Route>
-            <Route exact path="/sign-in">
-              <FormPage signIn />
+            <Route path="/sign-in">
+              {token ? <Redirect to="/" /> : <FormPage signIn />}
             </Route>
-            <Route exact path="/sign-up">
-              <FormPage signUp />
+            <Route path="/sign-up">
+              {token ? <Redirect to="/" /> : <FormPage signUp />}
             </Route>
-            <Route exact path="/profile">
-              <FormPage edit />
+            <Route path="/profile">
+              {!token ? <Redirect to="/" /> : <FormPage edit />}
+            </Route>
+            <Route path="/new-article">
+              <CreateArticlePage />
             </Route>
             <Route path={['/', '/articles']}>
               <MainPage />
