@@ -13,12 +13,18 @@ export default class RealWorldService {
     return res.json();
   };
 
-  postResource = async (url, body) => {
+  postResource = async (url, body, token = null) => {
+    const headers = {
+      'Content-Type': 'application/json;charset=utf-8',
+    };
+
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
+
     const res = await fetch(url, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json;charset=utf-8',
-      },
+      headers,
       body: JSON.stringify(body),
     });
 
@@ -30,11 +36,12 @@ export default class RealWorldService {
     return res.json();
   };
 
-  putResource = async (url, body) => {
+  putResource = async (url, body, token) => {
     const res = await fetch(url, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json;charset=utf-8',
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(body),
     });
@@ -76,5 +83,13 @@ export default class RealWorldService {
 
   login = (body) => {
     return this.postResource(`${this._apiBase}users/login`, body);
+  };
+
+  updateUser = (body, token) => {
+    return this.putResource(`${this._apiBase}user`, body, token);
+  };
+
+  createArticle = (body, token) => {
+    return this.postResource(`${this._apiBase}articles`, body, token);
   };
 }

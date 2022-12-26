@@ -1,0 +1,64 @@
+.article-form {
+  width: 65.138888%;
+  max-width: 938px;
+  background-color: #fff;
+  padding: 48px 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  row-gap: 21px;
+}
+
+.article-form-title {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 28px;
+  text-align: center;
+  color: #262626;
+}
+
+.article-form__label {
+  width: 100%;
+}
+
+.article-form__input-description {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 22px;
+}
+
+.article-form__label--tags {
+  display: flex;
+  flex-direction: column;
+  row-gap: 5px;
+}
+
+.tag__wrapper {
+  display: flex;
+  column-gap: 17px;
+}
+
+.tag__button {
+  background-color: inherit;
+  width: 118px;
+  height: 40px;
+  border: 1px solid #f5222d;
+  border-radius: 4px;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  color: #f5222d;
+  cursor: pointer;
+}
+
+.tag__button--add {
+  border: 1px solid #1890ff;
+  color: #1890ff;
+}
+
+.ant-input.css-dev-only-do-not-override-1s3dcof {
+  background-color: inherit;
+  color: black;
+}

@@ -5,7 +5,7 @@
 import { Link, useRouteMatch, useHistory } from 'react-router-dom';
 import { useForm, Controller } from 'react-hook-form';
 import { Input, Checkbox, Divider, Button } from 'antd';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useCallback } from 'react';
 
 import RealWorldService from '../../../services/RealWorldService';
@@ -15,6 +15,8 @@ import './formPage.scss';
 
 // Этот компонент в зависимости от пропсов возвращает немного разные страницы.
 function FormPage({ edit, signIn, signUp }) {
+  const token = useSelector((state) => state.appSlice.token);
+
   const history = useHistory();
 
   const dispatch = useDispatch();
@@ -32,9 +34,6 @@ function FormPage({ edit, signIn, signUp }) {
   } = useForm({
     mode: 'onBlur',
   });
-
-  console.log(path);
-  console.log(errors);
 
   // Очистка ошибок при переходе на другую страницу
   useEffect(() => {
@@ -67,12 +66,10 @@ function FormPage({ edit, signIn, signUp }) {
             image: data.image,
           },
         };
-        console.log('data', data);
-        console.log('dataImage', data.image);
         localStorage.setItem('image', data.image);
 
         realWorldService
-          .registrationAccout(changeableData)
+          .updateUser(changeableData, token)
           .then(({ user }) => {
             dispatch(userDataFilling(user));
 
