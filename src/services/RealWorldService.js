@@ -2,8 +2,18 @@
 export default class RealWorldService {
   _apiBase = 'https://blog.kata.academy/api/';
 
-  getResource = async (url) => {
-    const res = await fetch(url);
+  getResource = async (url, token) => {
+    const headers = {
+      'Content-Type': 'application/json;charset=utf-8',
+    };
+
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
+
+    const res = await fetch(url, {
+      headers,
+    });
 
     if (!res.ok) {
       throw new Error(`Запрос ${url} не удался. Код ошибки ${res.status}`);
@@ -66,9 +76,10 @@ export default class RealWorldService {
     }
   };
 
-  getArticles = (page = 1) => {
+  getArticles = (page = 1, token = null) => {
     return this.getResource(
-      `${this._apiBase}articles?limit=5&offset=${(page - 1) * 5}`
+      `${this._apiBase}articles?limit=5&offset=${(page - 1) * 5}`,
+      token
     );
   };
 
@@ -98,5 +109,38 @@ export default class RealWorldService {
 
   deleteArticle = (slug, token) => {
     return this.deleteResource(`${this._apiBase}articles/${slug}`, token);
+  };
+
+  likeArticle = async (slug, token) => {
+    const res = await fetch(
+      `https://blog.kata.academy/api/articles/${slug}/favorite`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (!res.ok) {
+      throw new Error('Error');
+    }
+  };
+
+  unLikeArticle = async (slug, token) => {
+    const res = await fetch(
+      `https://blog.kata.academy/api/articles/${slug}/favorite`,
+      {
+        method: 'DELETE',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (!res.ok) {
+      throw new Error('Error');
+    }
   };
 }

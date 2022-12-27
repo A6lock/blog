@@ -9,6 +9,7 @@ import { useState } from 'react';
 
 import RealWorldService from '../../services/RealWorldService';
 import Error from '../error/Error';
+import heartActive from '../../assets/images/likeActive.svg';
 
 import heart from './heart.svg';
 
@@ -17,6 +18,7 @@ import './articleItem.scss';
 function ArticleItem({
   title,
   favoritesCount,
+  favorited,
   description,
   createdAt,
   tagList,
@@ -30,9 +32,13 @@ function ArticleItem({
 
   const username = useSelector((state) => state.appSlice.username);
   const token = useSelector((state) => state.appSlice.token);
-  const articleItemClass = singleArticleBody ? 'article-item--body' : null;
+
+  const [likes, setLikes] = useState(favoritesCount);
+  const [isLike, setIslike] = useState(favorited);
 
   const history = useHistory();
+
+  const articleItemClass = singleArticleBody ? 'article-item--body' : null;
 
   const onDeleteArticle = () => {
     realWorldService
@@ -43,7 +49,30 @@ function ArticleItem({
       .catch(() => setError(() => true));
   };
 
+  const toggleLike = () => {
+    if (!isLike) {
+      setLikes(() => likes + 1);
+      realWorldService.likeArticle(slug, token).then(() => {
+        setIslike(() => true);
+      });
+    } else {
+      setLikes(() => likes - 1);
+      realWorldService.unLikeArticle(slug, token).then(() => {
+        setIslike(() => false);
+      });
+    }
+  };
+
   const isError = error ? <Error /> : null;
+
+  const linkStyle = {
+    'font-family': 'Inter',
+    'font-style': 'normal',
+    'font-weight': '400',
+    'font-size': '20px',
+    'line-height': '28px',
+    color: '#1890ff',
+  };
 
   const buttons =
     username === author.username && singleArticleBody ? (
@@ -71,15 +100,20 @@ function ArticleItem({
         <div className="article-item__columns">
           <div className="article-item__content">
             <header className="article-item__header">
-              <Link to={`/articles/${slug}`}>{title}</Link>
-              <button className="article-item__button" type="button">
-                <img src={heart} alt="Like bottom" />
+              <Link to={`/articles/${slug}`} style={linkStyle}>
+                {title}
+              </Link>
+              <button
+                className="article-item__button article-item__button--active"
+                type="button"
+                onClick={() => (token ? toggleLike() : () => {})}
+              >
+                <img src={isLike ? heartActive : heart} alt="Like bottom" />
               </button>
-              <span className="article-item__likes">{favoritesCount}</span>
+              <span className="article-item__likes">{likes}</span>
             </header>
             <ul className="article-item__tags-list">
               {tagList.map((tag) => {
-                // Придумать че-то когда нет тегов
                 return (
                   <li className="article-item__tag-item" key={uiidv4()}>
                     {tag}

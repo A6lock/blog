@@ -1,4 +1,6 @@
-/*eslint-disable */
+/* eslint-disable guard-for-in */
+/* eslint-disable no-restricted-syntax */
+/* eslint-disable no-case-declarations */
 /* eslint-disable no-alert */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable jsx-a11y/label-has-associated-control */
@@ -24,7 +26,7 @@ function FormPage({ edit, signIn, signUp }) {
   const { path } = useRouteMatch();
 
   const {
-    formState: { isValid, errors },
+    formState: { isValid },
     handleSubmit,
     control,
     watch,
@@ -38,11 +40,11 @@ function FormPage({ edit, signIn, signUp }) {
   // Очистка ошибок при переходе на другую страницу
   useEffect(() => {
     clearErrors();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [path]);
 
   // Функция серверной валидации логина для react hook form
   const serverLoginValidation = useCallback((...keys) => {
-    console.log('callback');
     [...keys].forEach((key) => {
       setError(key, {
         type: 'custom',
@@ -50,7 +52,8 @@ function FormPage({ edit, signIn, signUp }) {
       });
       setValue(key, null);
     });
-  });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const realWorldService = new RealWorldService();
 
@@ -73,15 +76,15 @@ function FormPage({ edit, signIn, signUp }) {
           .then(({ user }) => {
             dispatch(userDataFilling(user));
 
-            for (let key in user) {
+            for (const key in user) {
               localStorage.setItem(`${key}`, user[key]);
             }
 
-            //Переход на главную после изменений
+            // Переход на главную после изменений
             history.push('/articles');
           })
           .catch(({ errors }) => {
-            for (let error in errors) {
+            for (const error in errors) {
               setError(error, { type: 'custom', message: errors[error] });
             }
           });
@@ -99,14 +102,14 @@ function FormPage({ edit, signIn, signUp }) {
           .then(({ user }) => {
             dispatch(userDataFilling(user));
 
-            for (let key in user) {
+            for (const key in user) {
               localStorage.setItem(`${key}`, user[key]);
             }
 
-            //Переход на главную после того, как зарегистируемся
+            // Переход на главную после того, как зарегистируемся
             history.push('/articles');
           })
-          .catch(({ errors }) => {
+          .catch(() => {
             serverLoginValidation('password', 'email');
           });
         break;
@@ -125,15 +128,15 @@ function FormPage({ edit, signIn, signUp }) {
           .then(({ user }) => {
             dispatch(userDataFilling(user));
 
-            for (let key in user) {
+            for (const key in user) {
               localStorage.setItem(`${key}`, user[key]);
             }
 
-            //Переход на главную после того, как зарегистируемся
+            // Переход на главную после того, как зарегистируемся
             history.push('/articles');
           })
           .catch(({ errors }) => {
-            for (let error in errors) {
+            for (const error in errors) {
               setError(error, { type: 'custom', message: errors[error] });
             }
           });
@@ -344,6 +347,9 @@ function FormPage({ edit, signIn, signUp }) {
                       I agree to the processing of my personal informatio
                     </Checkbox>
                   );
+                }}
+                rules={{
+                  required: true,
                 }}
                 control={control}
                 name="approval"

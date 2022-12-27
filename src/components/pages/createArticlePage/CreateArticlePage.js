@@ -19,9 +19,9 @@ function CreateArticlePage() {
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const realWorldService = new RealWorldService();
-
   const token = useSelector((state) => state.appSlice.token);
+
+  const realWorldService = new RealWorldService();
 
   const history = useHistory();
 
@@ -69,6 +69,7 @@ function CreateArticlePage() {
       setValue('description', null);
       setValue('body', null);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isEdit]);
 
   // Добавление тега

@@ -14,7 +14,7 @@ export const fetchArticlesData = createAsyncThunk(
   'mian/fetchArticlesData',
   (page) => {
     const realWorldService = new RealWorldService();
-    return realWorldService.getArticles(page);
+    return realWorldService.getArticles(page, localStorage.getItem('token'));
   }
 );
 

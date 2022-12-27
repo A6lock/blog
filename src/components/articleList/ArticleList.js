@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from 'react-redux/es/exports';
 import { useEffect } from 'react';
 
 import ArticleItem from '../articleItem/ArticleItem';
+import Error from '../error/Error';
 
 import { changePage, fetchArticlesData } from './articleListSlice';
 
@@ -35,7 +36,7 @@ function ArticleList() {
 
   const spin = <Spin size="large" style={{ marginTop: '20%' }} />;
 
-  const error = <h2>Ашибка</h2>;
+  const error = <Error />;
 
   const articleList = articlesData.map((article) => {
     return (

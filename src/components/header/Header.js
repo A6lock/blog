@@ -17,8 +17,6 @@ function Header() {
 
   const dispatch = useDispatch();
 
-  useEffect(() => {}, [image]);
-
   const clearUserData = () => {
     dispatch(clearData()) && localStorage.clear();
     history.push('/articles');
@@ -70,7 +68,7 @@ function Header() {
     <header className="header">
       <div className="header__container">
         <div className="header__logo">
-          <Link to="/articles" className="header__link">
+          <Link tabIndex={1} to="/articles">
             Realworld Blog
           </Link>
         </div>

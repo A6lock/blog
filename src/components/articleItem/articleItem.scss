@@ -14,12 +14,14 @@
     display: flex;
     column-gap: 13px;
     align-items: baseline;
-    font-family: 'Inter';
-    font-style: normal;
-    font-weight: 400;
+    font-family: 'Inter UI';
     font-size: 20px;
     line-height: 28px;
     color: #1890ff;
+  }
+
+  &__button {
+    cursor: pointer;
   }
 
   &__likes {
