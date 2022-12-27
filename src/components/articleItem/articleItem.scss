@@ -63,6 +63,7 @@
   }
 
   &__info {
+    margin-bottom: 30px;
     min-width: 150px;
     display: flex;
     column-gap: 5px;
@@ -73,6 +74,11 @@
     border-radius: 50%;
     width: 46px;
     height: 46px;
+  }
+
+  &__buttons {
+    display: flex;
+    column-gap: 12px;
   }
 }
 

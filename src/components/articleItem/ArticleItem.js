@@ -1,7 +1,14 @@
+/* eslint-disable no-nested-ternary */
 import { format } from 'date-fns';
 import { v4 as uiidv4 } from 'uuid';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
+import { Button, Popconfirm } from 'antd';
 import ReactMarkdown from 'react-markdown';
+import { useSelector } from 'react-redux/es/hooks/useSelector';
+import { useState } from 'react';
+
+import RealWorldService from '../../services/RealWorldService';
+import Error from '../error/Error';
 
 import heart from './heart.svg';
 
@@ -17,13 +24,48 @@ function ArticleItem({
   slug,
   singleArticleBody,
 }) {
-  const body = singleArticleBody ? (
-    <ReactMarkdown>{singleArticleBody}</ReactMarkdown>
-  ) : null;
+  const [error, setError] = useState(false);
 
+  const realWorldService = new RealWorldService();
+
+  const username = useSelector((state) => state.appSlice.username);
+  const token = useSelector((state) => state.appSlice.token);
   const articleItemClass = singleArticleBody ? 'article-item--body' : null;
 
-  return (
+  const history = useHistory();
+
+  const onDeleteArticle = () => {
+    realWorldService
+      .deleteArticle(slug, token)
+      .then(() => {
+        history.push('/articles');
+      })
+      .catch(() => setError(() => true));
+  };
+
+  const isError = error ? <Error /> : null;
+
+  const buttons =
+    username === author.username && singleArticleBody ? (
+      <div className="article-item__buttons">
+        <Popconfirm
+          title="Are you sure to delete this article?"
+          okText="Yes"
+          cancelText="No"
+          placement="rightTop"
+          onConfirm={onDeleteArticle}
+        >
+          <Button danger>Delete</Button>
+        </Popconfirm>
+        <Link to={`/articles/${slug}/edit`}>
+          <Button style={{ color: '#52C41A', borderColor: '#52C41A' }}>
+            Edit
+          </Button>
+        </Link>
+      </div>
+    ) : null;
+
+  const content = (
     <div className={`article-item ${articleItemClass}`}>
       <article className="article-item__wrapper">
         <div className="article-item__columns">
@@ -47,24 +89,33 @@ function ArticleItem({
             </ul>
             <p className="article-item__text">{description}</p>
           </div>
-          <div className="article-item__info">
-            <div className="article-item__tech-info">
-              <h3 className="article-item__author">{author.username}</h3>
-              <span className="article-item__date">
-                {format(new Date(createdAt), 'MMMM dd, yyyy')}
-              </span>
+          <div>
+            <div className="article-item__info">
+              <div className="article-item__tech-info">
+                <h3 className="article-item__author">{author.username}</h3>
+                <span className="article-item__date">
+                  {format(new Date(createdAt), 'MMMM dd, yyyy')}
+                </span>
+              </div>
+              <img
+                className="article-item__avatar"
+                src={author.image}
+                alt="Author avatar"
+              />
             </div>
-            <img
-              className="article-item__avatar"
-              src={author.image}
-              alt="Author avatar"
-            />
+            {buttons}
           </div>
         </div>
-        {body}
+        {singleArticleBody ? (
+          <ReactMarkdown>{singleArticleBody}</ReactMarkdown>
+        ) : null}
       </article>
     </div>
   );
+
+  const visibleContent = error ? isError : content;
+
+  return visibleContent;
 }
 
 export default ArticleItem;

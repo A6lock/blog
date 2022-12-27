@@ -52,19 +52,18 @@ export default class RealWorldService {
     return res.json();
   };
 
-  deleteResource = async (url, body) => {
+  deleteResource = async (url, token) => {
     const res = await fetch(url, {
-      method: 'DELETE',
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json;charset=utf-8',
+        Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(body),
+      method: 'DELETE',
     });
 
-    if (!res.ok) {
+    if (res.status > 300) {
       throw new Error(`Запрос ${url} не уlался. Код ошибки ${res.status}`);
     }
-    return res.json();
   };
 
   getArticles = (page = 1) => {
@@ -91,5 +90,13 @@ export default class RealWorldService {
 
   createArticle = (body, token) => {
     return this.postResource(`${this._apiBase}articles`, body, token);
+  };
+
+  updateArticle = (slug, body, token) => {
+    return this.putResource(`${this._apiBase}articles/${slug}`, body, token);
+  };
+
+  deleteArticle = (slug, token) => {
+    return this.deleteResource(`${this._apiBase}articles/${slug}`, token);
   };
 }

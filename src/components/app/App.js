@@ -25,7 +25,7 @@ function App() {
         <Header />
         <main className="main">
           <Switch>
-            <Route path="/articles/:slug">
+            <Route exact path="/articles/:slug">
               <SingleArticlePage />
             </Route>
             <Route path="/sign-in">
@@ -38,6 +38,9 @@ function App() {
               {!token ? <Redirect to="/" /> : <FormPage edit />}
             </Route>
             <Route path="/new-article">
+              <CreateArticlePage />
+            </Route>
+            <Route exact path="/articles/:slug/edit">
               <CreateArticlePage />
             </Route>
             <Route path={['/', '/articles']}>
