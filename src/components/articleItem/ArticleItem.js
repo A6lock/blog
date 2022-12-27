@@ -66,11 +66,11 @@ function ArticleItem({
   const isError = error ? <Error /> : null;
 
   const linkStyle = {
-    'font-family': 'Inter',
-    'font-style': 'normal',
-    'font-weight': '400',
-    'font-size': '20px',
-    'line-height': '28px',
+    fontFamily: 'Inter',
+    fontStyle: 'normal',
+    fontWeight: '400',
+    fonSize: '20px',
+    lineHeight: '28px',
     color: '#1890ff',
   };
 

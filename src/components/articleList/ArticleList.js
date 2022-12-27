@@ -30,6 +30,8 @@ function ArticleList() {
       className="main__pagination"
       defaultCurrent={page}
       total={articlesCount}
+      defaultPageSize="5"
+      showSizeChanger={false}
       onChange={(page) => dispatch(changePage(page))}
     />
   ) : null;
