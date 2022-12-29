@@ -10,7 +10,7 @@ import { useState } from 'react';
 import RealWorldService from '../../services/RealWorldService';
 import Error from '../error/Error';
 import heartActive from '../../assets/images/likeActive.svg';
-import useAvatar from '../../hooks/useAvatar';
+import defaultAvatar from '../../assets/images/defaultAvatar.svg';
 
 import heart from './heart.svg';
 
@@ -27,9 +27,8 @@ function ArticleItem({
   slug,
   singleArticleBody,
 }) {
-  const avatar = useAvatar(author.image);
-
   const [error, setError] = useState(false);
+  const [avatarIsError, setAvatarIsError] = useState(false);
 
   const realWorldService = new RealWorldService();
 
@@ -119,7 +118,7 @@ function ArticleItem({
               {tagList.map((tag) => {
                 return (
                   <li className="article-item__tag-item" key={uiidv4()}>
-                    {tag}
+                    {tag.length > 50 ? `${tag.slice(0, 50)}...` : tag}
                   </li>
                 );
               })}
@@ -136,8 +135,9 @@ function ArticleItem({
               </div>
               <img
                 className="article-item__avatar"
-                src={avatar}
+                src={avatarIsError ? defaultAvatar : author.image}
                 alt="Author avatar"
+                onError={() => setAvatarIsError(() => true)}
               />
             </div>
             {buttons}
