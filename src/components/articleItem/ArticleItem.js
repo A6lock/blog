@@ -10,6 +10,7 @@ import { useState } from 'react';
 import RealWorldService from '../../services/RealWorldService';
 import Error from '../error/Error';
 import heartActive from '../../assets/images/likeActive.svg';
+import useAvatar from '../../hooks/useAvatar';
 
 import heart from './heart.svg';
 
@@ -26,6 +27,8 @@ function ArticleItem({
   slug,
   singleArticleBody,
 }) {
+  const avatar = useAvatar(author.image);
+
   const [error, setError] = useState(false);
 
   const realWorldService = new RealWorldService();
@@ -133,7 +136,7 @@ function ArticleItem({
               </div>
               <img
                 className="article-item__avatar"
-                src={author.image}
+                src={avatar}
                 alt="Author avatar"
               />
             </div>
