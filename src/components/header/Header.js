@@ -4,7 +4,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { Link, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux/es/exports';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 import './header.scss';
 
@@ -25,18 +25,18 @@ function Header() {
     history.push('/articles');
   };
 
-  useEffect(() => {}, [image]);
-
   const signIn = (
     <Link to="/sign-in" className="authorization__link">
       Sign In
     </Link>
   );
 
+  const visibleAvatar = image || avatar;
+
   const user = (
     <User
       name={username}
-      image={avatarIsError ? avatar : image}
+      image={avatarIsError ? avatar : visibleAvatar}
       setAvatarIsError={setAvatarIsError}
     />
   );
