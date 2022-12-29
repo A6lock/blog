@@ -43,8 +43,6 @@ function ProfilePage() {
         image: data.image,
       },
     };
-    localStorage.setItem('image', data.image);
-
     realWorldService
       .updateUser(changeableData, token)
       .then(({ user }) => {

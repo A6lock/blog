@@ -34,7 +34,7 @@ function Header() {
   const user = (
     <User
       name={username}
-      image={avatarIsError ? avatar : image}
+      image={!avatarIsError ? avatar : image}
       setAvatarIsError={setAvatarIsError}
     />
   );
