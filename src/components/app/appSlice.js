@@ -1,13 +1,15 @@
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit';
 
+import defaultAvatar from '../../assets/images/defaultAvatar.svg';
+
 const initialState = {
   loading: false,
   error: false,
   token: localStorage.getItem('token') || null,
   email: localStorage.getItem('email') || null,
   username: localStorage.getItem('username') || null,
-  image: localStorage.getItem('image') || null,
+  image: localStorage.getItem('image') || defaultAvatar,
 };
 
 const appSlice = createSlice({

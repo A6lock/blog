@@ -10,7 +10,9 @@ import Header from '../header/Header';
 import {
   SingleArticlePage,
   MainPage,
-  FormPage,
+  SignInPage,
+  SignUpPage,
+  ProfilePage,
   CreateArticlePage,
 } from '../pages';
 
@@ -29,13 +31,13 @@ function App() {
               <SingleArticlePage />
             </Route>
             <Route path="/sign-in">
-              {token ? <Redirect to="/" /> : <FormPage signIn />}
+              {token ? <Redirect to="/" /> : <SignInPage />}
             </Route>
             <Route path="/sign-up">
-              {token ? <Redirect to="/" /> : <FormPage signUp />}
+              {token ? <Redirect to="/" /> : <SignUpPage />}
             </Route>
             <Route path="/profile">
-              {!token ? <Redirect to="/" /> : <FormPage edit />}
+              {!token ? <Redirect to="/" /> : <ProfilePage />}
             </Route>
             <Route path="/new-article">
               <CreateArticlePage />

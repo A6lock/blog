@@ -1,8 +1,17 @@
 import SingleArticlePage from './SingleArticlePage';
 import MainPage from './MainPage';
-import FormPage from './formPage/FormPage';
+import SignInPage from './SignInPage';
+import SignUpPage from './SignUpPage';
+import ProfilePage from './ProfilePage';
 import CreateArticlePage from './createArticlePage/CreateArticlePage';
 
-// Тут собираю страницы
+// Сборка страниц
 
-export { SingleArticlePage, MainPage, FormPage, CreateArticlePage };
+export {
+  SingleArticlePage,
+  MainPage,
+  CreateArticlePage,
+  SignInPage,
+  SignUpPage,
+  ProfilePage,
+};
