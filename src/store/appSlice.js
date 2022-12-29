@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit';
 
-import defaultAvatar from '../../assets/images/defaultAvatar.svg';
+import defaultAvatar from '../assets/images/defaultAvatar.svg';
 
 const initialState = {
   loading: false,

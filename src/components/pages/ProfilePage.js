@@ -10,7 +10,7 @@ import { Input, Button } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 
 import RealWorldService from '../../services/RealWorldService';
-import { userDataFilling } from '../app/appSlice';
+import { userDataFilling } from '../../store/appSlice';
 
 import './formPage.scss';
 

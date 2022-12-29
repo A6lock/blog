@@ -10,7 +10,7 @@ import { Input, Checkbox, Divider, Button } from 'antd';
 import { useDispatch } from 'react-redux';
 
 import RealWorldService from '../../services/RealWorldService';
-import { userDataFilling } from '../app/appSlice';
+import { userDataFilling } from '../../store/appSlice';
 
 import './formPage.scss';
 

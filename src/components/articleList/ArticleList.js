@@ -6,8 +6,7 @@ import { useEffect } from 'react';
 
 import ArticleItem from '../articleItem/ArticleItem';
 import Error from '../error/Error';
-
-import { changePage, fetchArticlesData } from './articleListSlice';
+import { changePage, fetchArticlesData } from '../../store/articleListSlice';
 
 import './articleList.scss';
 

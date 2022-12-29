@@ -8,7 +8,7 @@ import { useState } from 'react';
 
 import './header.scss';
 
-import { clearData } from '../app/appSlice';
+import { clearData } from '../../store/appSlice';
 import avatar from '../../assets/images/defaultAvatar.svg';
 
 function Header() {
