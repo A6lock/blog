@@ -103,7 +103,7 @@ function ArticleItem({
           <div className="article-item__content">
             <header className="article-item__header">
               <Link to={`/articles/${slug}`} style={linkStyle}>
-                {title}
+                {title?.length > 100 ? `${title.slice(0, 50)}...` : title}
               </Link>
               <button
                 className="article-item__button article-item__button--active"
@@ -118,7 +118,7 @@ function ArticleItem({
               {tagList.map((tag) => {
                 return (
                   <li className="article-item__tag-item" key={uiidv4()}>
-                    {tag.length > 50 ? `${tag.slice(0, 50)}...` : tag}
+                    {tag?.length > 50 ? `${tag.slice(0, 50)}...` : tag}
                   </li>
                 );
               })}
